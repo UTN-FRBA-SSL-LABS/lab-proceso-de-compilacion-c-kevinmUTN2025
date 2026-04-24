@@ -1015,7 +1015,7 @@ SIMBOLOS_U_FINAL=SI
 
 ¿Por qué quedan? ¿Quién los resuelve y cuándo?
 
-> **R:**  Porque son funciones de la biblioteca dinamica del sistema. Es el programa el que lo resuelve cuando se ejecuta
+> **R:** Porque son funciones de la biblioteca dinamica del sistema. Es el programa el que lo resuelve cuando se ejecuta
 
 ---
 
