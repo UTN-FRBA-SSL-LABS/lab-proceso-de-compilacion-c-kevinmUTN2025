@@ -393,7 +393,7 @@ COMENTARIOS_EN_I=NO
 
 ¿Por qué ocurre eso?
 
-> **R:** porque aun no se ejecuta el codigo, solo se procesa
+> **R:** porque no existe ese patron de palabras u letras especifico en ese archivo
 
 ---
 
@@ -818,12 +818,27 @@ Salida esperada (simplificada):
 **P10.** Ejecutá `nm programa.o` y copiá la salida completa.
 
 > **R:**
+>00000000 b .bss
+>00000000 d .data
+>00000000 r .eh_frame
+>00000000 r .rdata
+>00000000 r .rdata$zzz
+>00000000 t .text
+>         U ___main
+>         U _area_circulo
+>         U _factorial
+>00000132 T _imprimir_separador
+>00000000 B _llamadas
+>0000001a T _main
+>         U _printf
+>         U _puts
+>00000000 T _sumar
 
 ¿Con qué letra aparece `area_circulo` en esa tabla?
 Escribí solo la letra (una mayúscula):
 
 <!-- Completá con la letra exacta que muestra nm (U, T, D, etc.): -->
-TIPO_AREA_EN_O=
+TIPO_AREA_EN_O=U
 
 ---
 
@@ -843,13 +858,14 @@ nm matematica.o
 **P11.** ¿Por qué `area_circulo` tiene ese tipo en `programa.o`
 pero tipo `T` en `matematica.o`?
 
-> **R:**
+> **R:** En programa.o aparece como U porque esa funcion solo es llamada pero no esta definida como tal en ese archivo,
+>mientras que la de matematica.o aparece con T porque si esta definida su estructura en ese archivo.
 
 ¿Qué etapa del proceso de compilación resuelve esa diferencia?
 Respondé con una palabra: PREPROCESAMIENTO, COMPILACION, ENSAMBLADO o ENLAZADO:
 
 <!-- Completá con una de las cuatro opciones: -->
-ETAPA_QUE_RESUELVE=
+ETAPA_QUE_RESUELVE=ENLAZADO
 
 ---
 
@@ -868,13 +884,13 @@ Un `.o` no es ejecutable por dos razones:
 
 **P12.** Intentá ejecutar `./programa.o` directamente. ¿Qué mensaje aparece?
 
-> **R:**
+> **R:** bash: ./programa.o: cannot execute binary file: Exec format error
 
 ¿Se puede ejecutar un archivo `.o` directamente?
 Respondé SI o NO:
 
 <!-- Completá con SI o NO: -->
-EJECUTABLE_O=
+EJECUTABLE_O=NO
 
 ---
 
@@ -963,13 +979,13 @@ nm programa | grep area_circulo
 **P13.** Enlazá con `gcc programa.o matematica.o -o programa`.
 Ejecutá `nm programa | grep "area_circulo"` y copiá la salida.
 
-> **R:**
+> **R:** 004015a8 T _area_circulo
 
 ¿Con qué letra aparece ahora `area_circulo` en el ejecutable final?
 Escribí solo la letra:
 
 <!-- Completá con la letra exacta que muestra nm: -->
-TIPO_AREA_ENLAZADO=
+TIPO_AREA_ENLAZADO=T
 
 ---
 
@@ -986,16 +1002,20 @@ Quedan algunos `U` incluso en el ejecutable final. ¿Por qué? Son funciones de 
 **P14.** Ejecutá `nm programa | grep "^ *U"` y copiá la salida.
 
 > **R:**
+>U __Jv_RegisterClasses
+>U ___deregister_frame_info
+>U ___register_frame_info
+
 
 ¿Quedan símbolos de tipo `U` en el ejecutable final?
 Respondé SI o NO:
 
 <!-- Completá con SI o NO: -->
-SIMBOLOS_U_FINAL=
+SIMBOLOS_U_FINAL=SI
 
 ¿Por qué quedan? ¿Quién los resuelve y cuándo?
 
-> **R:**
+> **R:**  Porque son funciones de la biblioteca dinamica del sistema. Es el programa el que lo resuelve cuando se ejecuta
 
 ---
 
@@ -1010,11 +1030,28 @@ SIMBOLOS_U_FINAL=
 **P15.** Ejecutá `./programa` y copiá la salida completa.
 
 > **R:**
+>=== Laboratorio de Compilacion en C (v1.0) ===
+>
+>sumar(3, 4)       = 7
+>CUADRADO(5)      = 25
+>MAX(7, 12)        = 12
+>----------------------------------------
+>area_circulo(5.0) = 78.5398
+>Factoriales:
+>  0! = 1
+>  1! = 1
+>  2! = 2
+>  3! = 6
+>  4! = 24
+>  5! = 120
+>----------------------------------------
+>Llamadas a sumar(): 1
+
 
 ¿Qué valor da `factorial(5)`? Escribí solo el número:
 
 <!-- Completá con el número exacto: -->
-FACTORIAL_5=
+FACTORIAL_5=120
 
 ---
 
@@ -1026,25 +1063,25 @@ FACTORIAL_5=
 como `CUADRADO(x)` y una **función real** como `sumar(a, b)`.
 ¿En qué etapa "desaparece" cada una? ¿Cuál tiene verificación de tipos?
 
-> **R:**
-
+> **R:** La funcion real calcula valores reales, mientras que la macro funcion, solo copia texto por asi decir. La macro desaparece en el preprocesamiento, mientras que la funcion real se mantiene hasta compilacion y ejecucion del programa. La funcion real es la que tiene verificacion por tipos.
 ---
 
 **P17.** ¿Qué diferencia hay entre un símbolo de tipo `T` y uno de tipo `D`
 en la salida de `nm`? ¿En qué sección del archivo objeto vive cada uno?
 
-> **R:**
+> **R:** T	Definido en la sección text (código ejecutable), esta en las funciones
+> D	Definido en la sección data, y como tal es una variable global con valor inicial (ej: int x = 5;)
 
 ---
 
 **P18.** (Bonus) Ejecutá `otool -L programa` (macOS) o `ldd programa` (Linux)
 y copiá la salida.
 
-> **R:**
+> **R:** No puedo ejecutar este comando en windows desde git bash
 
 ¿Por qué `libc` no hubo que especificarla explícitamente al enlazar con `gcc`?
 
-> **R:**
+> **R:** NO puede ejecutar el comando anterior para esto
 
 ---
 
